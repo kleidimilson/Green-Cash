@@ -1,8 +1,9 @@
-import React from 'react';
-import { View,Text,StyleSheet,TouchableOpacity,ScrollView } from 'react-native';
+import React,{useState, useEffect} from 'react';
+import api from '../../services/api';
+import { View,Text,StyleSheet,TouchableOpacity,ScrollView,Image } from 'react-native';
 import {Ionicons,FontAwesome5} from '@expo/vector-icons';
 import Slide from '../../components/scroll/index';
-import img1 from '../../images/arroz.png';
+import img1 from '../../images/fabrica.png';
 import img2 from '../../images/leite.png';
 import img3 from '../../images/suco.png';
 import img4 from '../../images/queijo.png';
@@ -40,7 +41,21 @@ const produtos  = [
     }
 ]
 
+
+
+
 const Company = ({navigation}) => {
+  
+  const [fabricas,setFabrica] = useState([]);
+
+  useEffect(()=>{
+    async function loadFabricas(){
+        const response = await api.get('/fabrica');
+        setFabrica(response.data)
+     }
+     loadFabricas();
+    })
+  
   return(
       <View style={{flex:1, backgroundColor:'#e5e5e5'}}>
           <View style={styles.header}>
@@ -58,10 +73,23 @@ const Company = ({navigation}) => {
         
           <ScrollView style={{marginTop: 10}}>
               <View style={{justifyContent:'center', alignItems:'center'}}>
-               {produtos.map(produto =>(
-                    <View style={styles.card} key={produto.Key}>
-                        <Text></Text>
+                <View style={styles.card}>
+
+                    <Text style={{color: '#43b581',fontSize:15, fontWeight:'bold'}}>Conheças as empresas que mais doaram cash back</Text>
+                </View>
+               {fabricas.map(fabrica =>(
+                    <View style={styles.card} key={fabrica.id}>
+                        <View style={styles.cardHeader}>
+                                <Image style={styles.imagens} source={img1} />
+                                <View style={{marginLeft:10}}>
+                                    <Text style={{fontSize:18, fontWeight:'bold'}}>{fabrica.name}</Text>
+                                   <Text style={{fontSize:16, fontWeight: 'bold',color:'#a5a5a5'}}>{fabrica.category}</Text>
+                                </View>
+                        </View>
+                        <TouchableOpacity style={styles.btn}><Text style={{fontSize:14, fontWeight:'bold', color:'#fff'}}>Vizualizar</Text></TouchableOpacity>
                     </View>
+                        
+                    
                ))
               
                }
@@ -71,6 +99,13 @@ const Company = ({navigation}) => {
   )
 }
 const styles = StyleSheet.create({
+    imagens: {
+        width: 60,
+        height: 60
+    },
+    cardHeader: {
+        flexDirection:'row'
+    },
     header: {
         height: 200,
         backgroundColor: '#43B581',
@@ -84,7 +119,14 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20
     },
-  
+    btn: {
+        width:100,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'#43b581',
+        borderRadius: 14
+    },
     botao: {
         borderWidth: 2,
         borderColor: '#fff',
@@ -102,7 +144,11 @@ const styles = StyleSheet.create({
         height: 90,
         backgroundColor: '#fff',
         marginBottom: 10,
-        marginTop: 0
+        marginTop: 0,
+        alignItems:'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 10
     }
 })
 export default Company;

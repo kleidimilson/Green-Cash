@@ -1,46 +1,51 @@
-import React from 'react';
-import { View,Text,StyleSheet,TouchableOpacity,ScrollView } from 'react-native';
+import React,{useState} from 'react';
+import { View,Text,StyleSheet,TouchableOpacity,ScrollView,Image } from 'react-native';
 import {Ionicons,FontAwesome5} from '@expo/vector-icons';
-import Slide from '../../components/scroll/index';
-import img1 from '../../images/arroz.png';
-import img2 from '../../images/leite.png';
-import img3 from '../../images/suco.png';
-import img4 from '../../images/queijo.png';
+
+import img1 from '../../images/01.png';
+import img2 from '../../images/02.png';
+import img3 from '../../images/03.png';
+import img4 from '../../images/04.png';
 
 // import { Container } from './styles';
 
 const produtos  = [
     {
         "Key": 1,
-        "name": 'Arroz',
+        "name": 'Ong I',
         "Imagem": img1,
-        "Order": '10,00',
-        "Point": '100'
+        "meta": '250',
+        
     },
     {
         "Key": 2,
-        "name": 'Leite',
+        "name": 'Ong II',
         "Imagem": img2,
-        "Order": '10,00',
-        "Point": '100'
+        "meta": '310',
+        
     },
     {
         "Key": 3,
-        "name": 'Suco',
+        "name": 'Ong III',
         "Imagem": img3,
-        "Order": '10,00',
-        "Point": '100'
+        "meta": '100'
     },
     {
         "Key": 4,
-        "name": 'Queijo',
+        "name": 'Ong IV',
         "Imagem": img4,
-        "Order": '10,00',
-        "Point": '100'
+        "meta": '200'
     }
 ]
 
 const Donate = ({navigation}) => {
+  const [num, setNum] = useState(250);
+  function somar(){
+    setNum(num+1)
+   }
+    function diminuir(){
+        setNum(num-1)
+    }
   return(
       <View style={{flex:1, backgroundColor:'#e5e5e5'}}>
           <View style={styles.header}>
@@ -60,7 +65,21 @@ const Donate = ({navigation}) => {
               <View style={{justifyContent:'center', alignItems:'center'}}>
                {produtos.map(produto =>(
                     <View style={styles.card} key={produto.Key}>
-                        <Text></Text>
+                        <View style={styles.cardHeader}>
+                                <Image style={styles.imagens} source={produto.Imagem} />
+                                <View style={{marginLeft:10}}>
+                                    <Text style={{fontSize:18, fontWeight:'bold'}}>{produto.name}</Text>
+                                    <Text style={{fontSize:18, fontWeight:'bold', color:'#43b581'}}>Meta: {produto.meta}</Text>
+                                  
+                                </View>
+                        </View>
+
+                        <View style={{flexDirection:'row',width:140,justifyContent:'space-between',alignItems:'center'}}>
+                            <TouchableOpacity style={styles.btn} onPress={diminuir}><Text style={{fontSize:14, fontWeight:'bold', color:'#fff'}}>-</Text></TouchableOpacity>
+                                 <Text>{num}</Text>
+                            <TouchableOpacity style={styles.btn} onPress={somar}><Text style={{fontSize:14, fontWeight:'bold', color:'#fff'}}>+</Text></TouchableOpacity>
+                        </View>
+                        
                     </View>
                ))
               
@@ -71,11 +90,28 @@ const Donate = ({navigation}) => {
   )
 }
 const styles = StyleSheet.create({
+    imagens: {
+        width: 60,
+        height: 60,
+        paddingLeft: 15
+    },
+    btn: {
+        width:50,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'#43b581',
+        borderRadius: 10
+    },
     header: {
         height: 200,
         backgroundColor: '#43B581',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
+    },
+    cardHeader: {
+        flexDirection:'row',
+        alignItems:'center'
     },
     headerBody:{
         flexDirection: 'row',
@@ -102,7 +138,11 @@ const styles = StyleSheet.create({
         height: 90,
         backgroundColor: '#fff',
         marginBottom: 10,
-        marginTop: 0
+        marginTop: 0,
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        padding: 10
     }
 })
 export default Donate;
